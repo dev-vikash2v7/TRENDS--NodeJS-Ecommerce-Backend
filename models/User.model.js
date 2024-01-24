@@ -3,6 +3,15 @@ import mongoose from "mongoose";
 
 const user_schema = mongoose.Schema(
   {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
     firstName: {
       type: String,
       default: "",
@@ -11,20 +20,14 @@ const user_schema = mongoose.Schema(
       type: String,
       default: "",
     },
-    email: {
-      type: String,
-      default: "",
-      unique: true,
-    },
-    phone: {
-      type: String,
-      require: true,
-      unique: true,
-    },
+    cartProducts : {
+      type: Array,
+      default: [],
+    }
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model("Users", user_schema);
+export default mongoose.model("User", user_schema);

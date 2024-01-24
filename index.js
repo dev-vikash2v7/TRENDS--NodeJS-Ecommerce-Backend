@@ -4,30 +4,19 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import rateLimit from "express-rate-limit";
-// import verificationRouter from "./routes/Verification.routes.js";
-
-import adminRouter from "./routes/Admin.routes.js";
-import { refreshToken, verifyToken } from "./middlewares/Token.js";
+import userRouter from "./routes/User.routes.js";
+import productRouter from "./routes/Product.routes.js";
 
 dotenv.config();
 
-const app = express();
-
-app.use(cors());
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(bodyParser.json());
 
 const port = process.env.PORT || 8080;
+const app = express();
 
 
-const rateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // maximum number of requests allowed within the window
-  message: "Too many requests, please try again later.",
-});
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 mongoose
@@ -44,10 +33,5 @@ mongoose
   });
 
 
-  app.use("/admin", adminRouter);
-  app.use("/refresh/token", rateLimiter, refreshToken );
-
-  app.get('/' , verifyToken , (req , res)=>{
-    res.json({message : 'you are a verified user'})
-  })
-
+app.use("/user", userRouter);
+app.use("/product", productRouter);

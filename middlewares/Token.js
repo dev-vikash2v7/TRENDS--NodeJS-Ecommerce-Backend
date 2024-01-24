@@ -1,7 +1,7 @@
 // Token Middleware
 import jwt from "jsonwebtoken";
 import RefreshToken from "../models/RefreshToken.js";
-import AdminModel from "../models/Admin.model.js";
+import UserModel from "../models/User.model.js";
 
 const generateToken = (id) => {
   // find user and sign token against user
@@ -21,7 +21,6 @@ const generateToken = (id) => {
 
 const verifyToken = (req, res, next) => {
 
-  console.log('veeeeeeeeeeeer')
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).send({ message: "Unauthorized Access!" });
@@ -41,9 +40,8 @@ const verifyToken = (req, res, next) => {
     }
 
     const { userID } = payload;
-    // console.log("aye yo", userID);
 
-    const user = await AdminModel.findById(userID);
+    const user = await UserModel.findById(userID);
     req.user = user?._id;
     next();
   });
@@ -70,6 +68,7 @@ const refreshToken = async (req, res) => {
       });
       return;
     }
+
 
     if (refreshToken.expiryDate.getTime() < new Date().getTime()) {
       console.log("no expired token");

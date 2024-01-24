@@ -5,7 +5,7 @@ const refresh_token_schema = new mongoose.Schema({
     token: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Admin",
+        ref: "Users",
     },
     expiryDate: Date,
 });
@@ -13,3 +13,4 @@ const refresh_token_schema = new mongoose.Schema({
 const RefreshToken = mongoose.model("RefreshToken", refresh_token_schema);
 
 export default RefreshToken;
+

@@ -1,29 +1,30 @@
-import Admin from "../models/Admin.model.js";
+import UserModel from "../models/User.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 
-const registerAdmin = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const {  email, password } = req.body;
 
     // Check if the username already exists in the database
-    const existingAdmin = await Admin.findOne({ email });
+    const existingUser = await UserModel.findOne({ email });
 
-    if (existingAdmin) {
+    if (existingUser) {
       return res.status(400).json({ error: "Email already exists" });
     }
 
     // Hash the password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new admin document and save it to the database
-    const newAdmin = new Admin({ email, password: hashedPassword });
-    await newAdmin.save();
+    // Create a new UserModel document and save it to the database
+    const newUser = new UserModel({ email, password: hashedPassword });
+    await newUser.save();
+
 
     // Generate the access token
     const accessToken = jwt.sign(
-      { email: newAdmin.email },
+      { email: newUser.email },
       "access_token",
       {
         // expiresIn: '1h', // Access token expiration time (can be adjusted as per your requirement)
@@ -32,7 +33,7 @@ const registerAdmin = async (req, res) => {
 
     // Generate the refresh token
     const refreshToken = jwt.sign(
-      { email: newAdmin.email },
+      { email: newUser.email },
       "your_refresh_secret",
       {
         expiresIn: "7d", // Refresh token expiration time (can be adjusted as per your requirement)
@@ -43,27 +44,27 @@ const registerAdmin = async (req, res) => {
     return res.status(201).json({ accessToken, refreshToken });
 
   } catch (err) {
-    console.error("Error in registerAdmin:", err);
+    console.error("Error in registerUser:", err);
     // return res.status(500).json({ error: "Internal server error" });
     return res.status(500).json({ error: err.message });
   }
 };
 
 
-const loginAdmin = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find the admin in the database by the provided username
-    const admin = await Admin.findOne({ email });
+    // Find the UserModel in the database by the provided email
+    const User = await UserModel.findOne({ email });
 
-    if (!admin) {
-       return res.status(404).json({ error: "Admin not found" });
+    if (!User) {
+       return res.status(404).json({ error: "UserModel not found" });
     }
 
-    if (admin) {
+    if (User) {
       // Compare the provided password with the hashed password in the database
-      const isPasswordValid = await bcrypt.compare(password, admin.password);
+      const isPasswordValid = await bcrypt.compare(password, User.password);
 
       if (!isPasswordValid) {
         return res.status(401).json({ error: "Invalid credentials" });
@@ -71,7 +72,7 @@ const loginAdmin = async (req, res) => {
 
       // Generate the access token
       const accessToken = jwt.sign(
-        { email: admin.email },
+        { email: User.email },
         "access_token",
         {
           // expiresIn: '1h', // Access token expiration time (can be adjusted as per your requirement)
@@ -80,7 +81,7 @@ const loginAdmin = async (req, res) => {
 
       // Generate the refresh token
       const refreshToken = jwt.sign(
-        { username: admin.email },
+        { username: User.email },
         "your_refresh_secret",
         {
           expiresIn: "7d", // Refresh token expiration time (can be adjusted as per your requirement)
@@ -88,7 +89,7 @@ const loginAdmin = async (req, res) => {
       );
 
       // Return the access token and the refresh token in the response
-      return res.status(200).json({ accessToken, refreshToken, role: "admin" });
+      return res.status(200).json({ accessToken, refreshToken, role: "User" });
 
     } 
 
@@ -96,13 +97,30 @@ const loginAdmin = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
 
   } catch (err) {
-    console.error("Error in loginAdmin:", err);
+    console.error("Error in loginUser:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
 
+const getAllUsers = async (req, res) => {
+
+  try {
+   
+    const users = await UserModel.find() ;
+   
+    res.status(200).json({ users });
+  } catch (err) {
+    res.status(500).json({
+      message: 'INTERNAL_SERVER_ERROR',
+    });
+  }
+};
+
+
+
 export {
-  registerAdmin,
-  loginAdmin,
+  registerUser,
+  loginUser,
+  getAllUsers
 };
