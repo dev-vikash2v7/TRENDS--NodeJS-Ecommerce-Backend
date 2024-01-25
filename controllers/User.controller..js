@@ -89,7 +89,7 @@ const loginUser = async (req, res) => {
       );
 
       // Return the access token and the refresh token in the response
-      return res.status(200).json({ accessToken, refreshToken, role: "User" });
+      return res.status(200).json({userDetails : User ,  accessToken, refreshToken, role: "User" });
 
     } 
 

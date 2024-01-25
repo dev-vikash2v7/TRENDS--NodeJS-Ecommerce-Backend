@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 
+
+
 const user_schema = mongoose.Schema(
   {
     email: {
@@ -20,10 +22,7 @@ const user_schema = mongoose.Schema(
       type: String,
       default: "",
     },
-    cartProducts : {
-      type: Array,
-      default: [],
-    }
+    
   },
   {
     timestamps: true,
