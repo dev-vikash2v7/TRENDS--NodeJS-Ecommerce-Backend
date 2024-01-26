@@ -45,9 +45,15 @@ app.post('/create-payment-intent', async (req, res) => {
     const { amount  , currency } = req.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-       currency : currency,
+
+        amount,
+       currency ,
+
+       payment_method_types: ['card'],
+       description: 'Payment Request From CloudLumous Pvt, Ltd',
+       receipt_email : 'vikashvermacom92@gmail.com',      
     });
+
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
 
