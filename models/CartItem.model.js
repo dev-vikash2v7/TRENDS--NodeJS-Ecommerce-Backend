@@ -10,11 +10,15 @@ const cart_schema = mongoose.Schema(
       },
       products: [
         {
-            productId : {
+            id : {
+              type: Number,
+              required: true,
+            },
+            title: {
               type: String,
               required: true,
             },
-            name: {
+            imageUrl: {
               type: String,
               required: true,
             },
@@ -32,3 +36,4 @@ const cart_schema = mongoose.Schema(
   )
 
 export default mongoose.model("CartItem", cart_schema);
+

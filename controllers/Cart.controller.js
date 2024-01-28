@@ -6,7 +6,7 @@ const getUserCartProducts = async (req, res) => {
     const { userId } = req.query;
 
     const cart = await CartItemModel.findOne({ userId });
-    res.json(cart?.products || { products: [] });
+    res.json( {products : cart?.products ||  [] });
 
   } catch (err) {
     res.status(500).json({
@@ -31,7 +31,7 @@ const addToUserCart = async (req, res) => {
     }
 
     // Check if the item is already in the cart
-    const existingItem = cart.products.find(item => item.productId === product.productId);
+    const existingItem = cart.products.find(item => item.id === product.id);
 
     if (existingItem) {
       // If the item exists, update the quantity
@@ -39,7 +39,6 @@ const addToUserCart = async (req, res) => {
     } else {
       // If the item does not exist, add it to the cart
       cart.products.push(  product );
- 
     }
 
     // Save the updated cart
@@ -48,8 +47,10 @@ const addToUserCart = async (req, res) => {
     res.json(cart);
 
   } catch (err) {
+    console.log('error ' , err)
+
     res.status(500).json({
-      message: 'INTERNAL_SERVER_ERROR',
+      message: 'INTERNAL_SERVER_ERROR : '  + err.message,
       error : err.message
     });
   }
