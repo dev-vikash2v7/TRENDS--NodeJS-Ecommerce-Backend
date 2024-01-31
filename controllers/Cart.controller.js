@@ -57,8 +57,53 @@ const addToUserCart = async (req, res) => {
 };
 
 
+const updateCartItemQuantity = async (req, res) => {
+  try {
+
+    const {userId  } = req.query;
+    const  {productId,  newQuantity}  = req.body;
+
+
+    // Check if the user's cart exists, if not, create a new one
+    let cartItems = await CartItemModel.findOne({ userId });
+
+    if (!cartItems) {
+      res.status(500).json({
+        error :  'You dont have a cart',
+      });
+    }
+
+
+
+    const itemIndex = cartItems.products.findIndex(item => item.id === productId);
+
+    if (itemIndex !== -1) {
+      if (newQuantity > 0) {
+        cartItems.products[itemIndex].quantity = newQuantity;
+      } else {
+        cartItems.products.splice(itemIndex, 1);
+      }
+    }
+
+    cartItems.save()
+
+    res.json(  {result : cartItems});
+
+  } catch (err) {
+    console.log('error ' , err)
+
+    res.status(500).json({
+      error :  'INTERNAL_SERVER_ERROR : '  + err.message,
+    });
+  }
+};
+
+
+
+
 export {
 
   getUserCartProducts,
   addToUserCart,
+  updateCartItemQuantity
 };

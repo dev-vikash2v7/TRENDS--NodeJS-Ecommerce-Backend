@@ -14,7 +14,7 @@ const cart_schema = mongoose.Schema(
               type: Number,
               required: true,
             },
-            title: {
+            name: {
               type: String,
               required: true,
             },
