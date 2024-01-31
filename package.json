@@ -1,0 +1,29 @@
+{
+  "name": "ecommerce-backend",
+  "version": "1.0.0",
+  "description": "\"# Ecommerce-backend\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.1",
+    "nodemon": "^2.0.22",
+    "request": "^2.88.2",
+    "stripe": "^14.13.0",
+    "uuid": "^9.0.0"
+  }
+}
